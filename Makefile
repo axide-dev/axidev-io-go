@@ -6,6 +6,14 @@ REPO_URL = https://github.com/ZiedYousfi/typr-io/releases/download/$(VERSION)
 # All supported platforms and architectures
 PLATFORMS = linux-arm64 linux-x86_64 macos-arm64 macos-x86_64 windows-arm64 windows-x64
 
+# Helper to fix library names (remove version suffixes and symlinks)
+define FIX_LIBS
+	@echo "Fixing library names in lib/$(1)..."
+	@find lib/$(1) -type f -name "libtypr_io.so.*" -exec mv {} lib/$(1)/libtypr_io.so \; 2>/dev/null || true
+	@find lib/$(1) -type f -name "libtypr_io.*.dylib" -exec mv {} lib/$(1)/libtypr_io.dylib \; 2>/dev/null || true
+	@find lib/$(1) -type l -name "libtypr_io.*" -delete 2>/dev/null || true
+endef
+
 .PHONY: all install install-all install-current clean
 
 all: install-all
@@ -23,6 +31,7 @@ install-all:
 	@cp -R tmp-linux-arm64/include/* include/ 2>/dev/null || true
 	@cp -R tmp-linux-arm64/lib/lib* lib/linux-arm64/
 	@rm -rf tmp-linux-arm64 linux-arm64.tar.gz
+	$(call FIX_LIBS,linux-arm64)
 
 	# Download and extract Linux x86_64
 	@echo "Fetching linux-x86_64..."
@@ -32,6 +41,7 @@ install-all:
 	@cp -R tmp-linux-x86_64/include/* include/ 2>/dev/null || true
 	@cp -R tmp-linux-x86_64/lib/lib* lib/linux-x86_64/
 	@rm -rf tmp-linux-x86_64 linux-x86_64.tar.gz
+	$(call FIX_LIBS,linux-x86_64)
 
 	# Download and extract macOS ARM64
 	@echo "Fetching macos-arm64..."
@@ -41,6 +51,7 @@ install-all:
 	@cp -R tmp-macos-arm64/include/* include/ 2>/dev/null || true
 	@cp -R tmp-macos-arm64/lib/lib* lib/macos-arm64/
 	@rm -rf tmp-macos-arm64 macos-arm64.tar.gz
+	$(call FIX_LIBS,macos-arm64)
 
 	# Download and extract macOS x86_64
 	@echo "Fetching macos-x86_64..."
@@ -50,6 +61,7 @@ install-all:
 	@cp -R tmp-macos-x86_64/include/* include/ 2>/dev/null || true
 	@cp -R tmp-macos-x86_64/lib/lib* lib/macos-x86_64/
 	@rm -rf tmp-macos-x86_64 macos-x86_64.tar.gz
+	$(call FIX_LIBS,macos-x86_64)
 
 	# Download and extract Windows ARM64
 	@echo "Fetching windows-arm64..."
@@ -97,6 +109,8 @@ install-current:
 
 	@cp -R $(RELEASE_DIR)/include/* include/
 	@cp -R $(RELEASE_DIR)/lib/lib* lib/$(PLATFORM)-$(GOARCH)/
+
+	$(call FIX_LIBS,$(PLATFORM)-$(GOARCH))
 
 	@echo "Cleaning up temporary files..."
 	@rm -rf $(RELEASE_DIR)
