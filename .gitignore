@@ -2,3 +2,6 @@
 include/typr-io/*
 !include/typr-io/c_api.h
 **/cmake/**
+**/CMakeFiles/**
+**/CMakeLists.txt
+**/*.cmake
