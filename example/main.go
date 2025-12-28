@@ -1,6 +1,4 @@
 // Example usage of the typrio package.
-//
-//go:build ignore
 
 package main
 
@@ -11,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ziedyousfi/typr-io-go/typrio"
+	"github.com/ziedyousfi/typr-io-go/typr-io"
 )
 
 func main() {
@@ -46,8 +44,8 @@ func main() {
 
 	// Type some text (if supported)
 	if caps.CanInjectText {
-		fmt.Println("Typing text in 2 seconds...")
-		time.Sleep(2 * time.Second)
+		fmt.Println("Typing text in 5 seconds...")
+		time.Sleep(5	 * time.Second)
 		if err := sender.TypeText("Hello from typr-io-go!"); err != nil {
 			fmt.Println("TypeText error:", err)
 		}
