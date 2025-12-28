@@ -1,3 +1,4 @@
 .DS_Store
 include/typr-io/*
 !include/typr-io/c_api.h
+**/cmake/**
