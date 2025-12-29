@@ -1,13 +1,13 @@
 # Project parameters
-LIB_NAME = typr-io
+LIB_NAME = axidev-io
 VERSION = v0.2.1
-REPO_URL = https://github.com/ZiedYousfi/typr-io/releases/download/$(VERSION)
+REPO_URL = https://github.com/ZiedYousfi/axidev-io/releases/download/$(VERSION)
 
 # All supported platforms and architectures
 PLATFORMS = linux-arm64 linux-x86_64 macos-arm64 macos-x86_64 windows-arm64 windows-x64
 
 define remove_other_headers
-	@find include/typr-io -name '*.hpp' -type f -exec rm -f {} +
+	@find include/axidev-io -name '*.hpp' -type f -exec rm -f {} +
 endef
 
 .PHONY: all install install-all install-current clean
@@ -16,7 +16,7 @@ all: install-all
 
 # Install all platform libraries
 install-all:
-	@echo "Downloading all typr-io releases..."
+	@echo "Downloading all axidev-io releases..."
 	@mkdir -p include lib
 
 	# Download and extract Linux ARM64
