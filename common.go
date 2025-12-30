@@ -15,26 +15,27 @@ import (
 
 // LibraryVersion returns the axidev-io library version string.
 func LibraryVersion() string {
-	return C.GoString(C.typr_io_library_version())
+	return C.GoString(C.axidev_io_library_version())
 }
 
 // GetLastError returns the last error string from the library, if any.
 func GetLastError() string {
-	cStr := C.typr_io_get_last_error()
+	cStr := C.axidev_io_get_last_error()
 	if cStr == nil {
 		return ""
 	}
-	defer C.typr_io_free_string(cStr)
+	defer C.axidev_io_free_string(cStr)
 	return C.GoString(cStr)
 }
 
 // ClearLastError clears the last error string.
 func ClearLastError() {
-	C.typr_io_clear_last_error()
+	C.axidev_io_clear_last_error()
 }
 
-// getLastError is an internal helper that returns the last error or a fallback message.
-func getLastError(fallback string) error {
+// GetLastErrorOrDefault returns the last error or a fallback message as an error.
+// This is useful for wrapping C API calls that may set a global error.
+func GetLastErrorOrDefault(fallback string) error {
 	if errStr := GetLastError(); errStr != "" {
 		return errors.New(errStr)
 	}
@@ -43,7 +44,7 @@ func getLastError(fallback string) error {
 
 // freeString is a helper to free C strings.
 func freeString(s *C.char) {
-	C.typr_io_free_string(s)
+	C.axidev_io_free_string(s)
 }
 
 // cString allocates a C string that must be freed with C.free.

@@ -1,20 +1,23 @@
-package axidevio
+package keyboard
 
 /*
 #include <axidev-io/c_api.h>
+#include <stdlib.h>
 */
 import "C"
 
-// Key represents a logical key identifier.
+import "unsafe"
+
+// Key represents a logical keyboard key identifier.
 type Key uint16
 
 // KeyToString converts a Key to its canonical string name.
 func KeyToString(key Key) string {
-	cStr := C.typr_io_key_to_string(C.typr_io_key_t(key))
+	cStr := C.axidev_io_keyboard_key_to_string(C.axidev_io_keyboard_key_t(key))
 	if cStr == nil {
 		return ""
 	}
-	defer freeString(cStr)
+	defer C.axidev_io_free_string(cStr)
 	return C.GoString(cStr)
 }
 
@@ -31,7 +34,7 @@ func KeyToString(key Key) string {
 //   - Modifiers: "Shift", "Control", "Alt", "Super", "Meta", "CapsLock", "NumLock"
 //   - Special: "Escape", "Esc", "PrintScreen", "ScrollLock", "Pause"
 func StringToKey(name string) Key {
-	cName := cString(name)
-	defer freeCString(cName)
-	return Key(C.typr_io_string_to_key(cName))
+	cName := C.CString(name)
+	defer C.free(unsafe.Pointer(cName))
+	return Key(C.axidev_io_keyboard_string_to_key(cName))
 }

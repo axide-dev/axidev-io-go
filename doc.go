@@ -1,41 +1,29 @@
-// Package axidevio provides Go bindings for the axidev-io input injection and listening library.
+// Package axidevio provides Go bindings for the axidev-io library.
 //
-// This package wraps the axidev-io C API, providing a safe and idiomatic Go interface
-// for simulating keyboard input and monitoring global key events.
+// This package provides common utilities (logging, error handling, version info)
+// for the axidev-io library. Keyboard-specific functionality is in the keyboard subpackage.
 //
-// # Quick Start
+// # Package Structure
 //
-// Create a Sender to inject keyboard input:
+//   - axidevio: Common utilities (logging, errors, version)
+//   - axidevio/keyboard: Keyboard input injection and event monitoring
 //
-//	sender, err := axidevio.NewSender()
-//	if err != nil {
-//	    log.Fatal(err)
-//	}
-//	defer sender.Close()
+// # Logging
 //
-//	// Type some text
-//	sender.TypeText("Hello, World!")
+// Control library logging verbosity:
 //
-//	// Press a key combination
-//	sender.Combo(axidevio.ModCtrl, axidevio.StringToKey("S"))
+//	axidevio.SetLogLevel(axidevio.LogLevelDebug) // Enable debug logs
+//	axidevio.SetLogLevel(axidevio.LogLevelError) // Only show errors
 //
-// Create a Listener to monitor keyboard events:
+// # Keyboard Usage
 //
-//	listener, err := axidevio.NewListener()
-//	if err != nil {
-//	    log.Fatal(err)
-//	}
-//	defer listener.Close()
+// See the keyboard subpackage for keyboard input injection and monitoring:
 //
-//	listener.Start(func(event axidevio.KeyEvent) {
-//	    fmt.Printf("Key: %s, Pressed: %v\n", axidevio.KeyToString(event.Key), event.Pressed)
-//	})
+//	import "github.com/ziedyousfi/axidev-io-go/keyboard"
 //
-// # Thread Safety
-//
-// All Sender and Listener methods are thread-safe. However, the listener callback
-// is invoked from a background thread, so callbacks must be thread-safe and avoid
-// blocking operations.
+//	sender, _ := keyboard.NewSender()
+//	sender.TypeText("Hello!")
+//	sender.Combo(keyboard.ModCtrl, keyboard.StringToKey("S"))
 //
 // # Runtime Path Configuration
 //

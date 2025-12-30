@@ -1,6 +1,6 @@
-package axidevio
+package keyboard
 
-// Capabilities describes the features supported by the active backend.
+// Capabilities describes the features supported by the keyboard backend.
 type Capabilities struct {
 	// CanInjectKeys is true if the backend can send physical key events.
 	CanInjectKeys bool

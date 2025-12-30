@@ -1,4 +1,4 @@
-package axidevio
+package keyboard
 
 /*
 #include <stdint.h>
@@ -11,8 +11,8 @@ import (
 	"unsafe"
 )
 
-//export goListenerCallback
-func goListenerCallback(codepoint C.uint32_t, key C.uint16_t, mods C.uint8_t, pressed C._Bool, userData unsafe.Pointer) {
+//export goKeyboardListenerCallback
+func goKeyboardListenerCallback(codepoint C.uint32_t, key C.uint16_t, mods C.uint8_t, pressed C._Bool, userData unsafe.Pointer) {
 	handle := *(*cgo.Handle)(userData)
 	listener := handle.Value().(*Listener)
 

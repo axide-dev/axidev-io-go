@@ -1,4 +1,4 @@
-package axidevio
+package keyboard
 
 /*
 #include <axidev-io/c_api.h>
@@ -9,20 +9,23 @@ import "C"
 import (
 	"errors"
 	"sync"
+	"unsafe"
+
+	axidevio "github.com/ziedyousfi/axidev-io-go"
 )
 
-// Sender provides input injection capabilities.
+// Sender provides keyboard input injection capabilities.
 type Sender struct {
-	handle C.typr_io_sender_t
+	handle C.axidev_io_keyboard_sender_t
 	mu     sync.Mutex
 }
 
-// NewSender creates a new Sender instance.
+// NewSender creates a new keyboard Sender instance.
 // Returns an error if allocation fails.
 func NewSender() (*Sender, error) {
-	handle := C.typr_io_sender_create()
+	handle := C.axidev_io_keyboard_sender_create()
 	if handle == nil {
-		return nil, errors.New("failed to create sender")
+		return nil, errors.New("failed to create keyboard sender")
 	}
 	return &Sender{handle: handle}, nil
 }
@@ -33,19 +36,19 @@ func (s *Sender) Close() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.handle != nil {
-		C.typr_io_sender_destroy(s.handle)
+		C.axidev_io_keyboard_sender_destroy(s.handle)
 		s.handle = nil
 	}
 }
 
-// IsReady returns true if the backend is ready to inject events.
+// IsReady returns true if the backend is ready to inject keyboard events.
 func (s *Sender) IsReady() bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.handle == nil {
 		return false
 	}
-	return bool(C.typr_io_sender_is_ready(s.handle))
+	return bool(C.axidev_io_keyboard_sender_is_ready(s.handle))
 }
 
 // BackendType returns the active backend type as an integer.
@@ -55,7 +58,7 @@ func (s *Sender) BackendType() uint8 {
 	if s.handle == nil {
 		return 0
 	}
-	return uint8(C.typr_io_sender_type(s.handle))
+	return uint8(C.axidev_io_keyboard_sender_type(s.handle))
 }
 
 // Capabilities returns the backend capabilities.
@@ -65,8 +68,8 @@ func (s *Sender) Capabilities() Capabilities {
 	if s.handle == nil {
 		return Capabilities{}
 	}
-	var caps C.typr_io_capabilities_t
-	C.typr_io_sender_get_capabilities(s.handle, &caps)
+	var caps C.axidev_io_keyboard_capabilities_t
+	C.axidev_io_keyboard_sender_get_capabilities(s.handle, &caps)
 	return Capabilities{
 		CanInjectKeys:            bool(caps.can_inject_keys),
 		CanInjectText:            bool(caps.can_inject_text),
@@ -86,7 +89,7 @@ func (s *Sender) RequestPermissions() bool {
 	if s.handle == nil {
 		return false
 	}
-	return bool(C.typr_io_sender_request_permissions(s.handle))
+	return bool(C.axidev_io_keyboard_sender_request_permissions(s.handle))
 }
 
 // KeyDown simulates a physical key press.
@@ -96,8 +99,8 @@ func (s *Sender) KeyDown(key Key) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_key_down(s.handle, C.typr_io_key_t(key)) {
-		return getLastError("key down failed")
+	if !C.axidev_io_keyboard_sender_key_down(s.handle, C.axidev_io_keyboard_key_t(key)) {
+		return axidevio.GetLastErrorOrDefault("key down failed")
 	}
 	return nil
 }
@@ -109,8 +112,8 @@ func (s *Sender) KeyUp(key Key) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_key_up(s.handle, C.typr_io_key_t(key)) {
-		return getLastError("key up failed")
+	if !C.axidev_io_keyboard_sender_key_up(s.handle, C.axidev_io_keyboard_key_t(key)) {
+		return axidevio.GetLastErrorOrDefault("key up failed")
 	}
 	return nil
 }
@@ -122,8 +125,8 @@ func (s *Sender) Tap(key Key) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_tap(s.handle, C.typr_io_key_t(key)) {
-		return getLastError("tap failed")
+	if !C.axidev_io_keyboard_sender_tap(s.handle, C.axidev_io_keyboard_key_t(key)) {
+		return axidevio.GetLastErrorOrDefault("tap failed")
 	}
 	return nil
 }
@@ -135,7 +138,7 @@ func (s *Sender) ActiveModifiers() Modifier {
 	if s.handle == nil {
 		return 0
 	}
-	return Modifier(C.typr_io_sender_active_modifiers(s.handle))
+	return Modifier(C.axidev_io_keyboard_sender_active_modifiers(s.handle))
 }
 
 // HoldModifier presses the specified modifier keys.
@@ -145,8 +148,8 @@ func (s *Sender) HoldModifier(mods Modifier) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_hold_modifier(s.handle, C.typr_io_modifier_t(mods)) {
-		return getLastError("hold modifier failed")
+	if !C.axidev_io_keyboard_sender_hold_modifier(s.handle, C.axidev_io_keyboard_modifier_t(mods)) {
+		return axidevio.GetLastErrorOrDefault("hold modifier failed")
 	}
 	return nil
 }
@@ -158,8 +161,8 @@ func (s *Sender) ReleaseModifier(mods Modifier) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_release_modifier(s.handle, C.typr_io_modifier_t(mods)) {
-		return getLastError("release modifier failed")
+	if !C.axidev_io_keyboard_sender_release_modifier(s.handle, C.axidev_io_keyboard_modifier_t(mods)) {
+		return axidevio.GetLastErrorOrDefault("release modifier failed")
 	}
 	return nil
 }
@@ -171,8 +174,8 @@ func (s *Sender) ReleaseAllModifiers() error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_release_all_modifiers(s.handle) {
-		return getLastError("release all modifiers failed")
+	if !C.axidev_io_keyboard_sender_release_all_modifiers(s.handle) {
+		return axidevio.GetLastErrorOrDefault("release all modifiers failed")
 	}
 	return nil
 }
@@ -184,8 +187,8 @@ func (s *Sender) Combo(mods Modifier, key Key) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_combo(s.handle, C.typr_io_modifier_t(mods), C.typr_io_key_t(key)) {
-		return getLastError("combo failed")
+	if !C.axidev_io_keyboard_sender_combo(s.handle, C.axidev_io_keyboard_modifier_t(mods), C.axidev_io_keyboard_key_t(key)) {
+		return axidevio.GetLastErrorOrDefault("combo failed")
 	}
 	return nil
 }
@@ -197,10 +200,10 @@ func (s *Sender) TypeText(text string) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	cText := cString(text)
-	defer freeCString(cText)
-	if !C.typr_io_sender_type_text_utf8(s.handle, cText) {
-		return getLastError("type text failed")
+	cText := C.CString(text)
+	defer C.free(unsafe.Pointer(cText))
+	if !C.axidev_io_keyboard_sender_type_text_utf8(s.handle, cText) {
+		return axidevio.GetLastErrorOrDefault("type text failed")
 	}
 	return nil
 }
@@ -212,18 +215,18 @@ func (s *Sender) TypeCharacter(codepoint rune) error {
 	if s.handle == nil {
 		return errors.New("sender is closed")
 	}
-	if !C.typr_io_sender_type_character(s.handle, C.uint32_t(codepoint)) {
-		return getLastError("type character failed")
+	if !C.axidev_io_keyboard_sender_type_character(s.handle, C.uint32_t(codepoint)) {
+		return axidevio.GetLastErrorOrDefault("type character failed")
 	}
 	return nil
 }
 
-// Flush forces delivery of pending events.
+// Flush forces delivery of pending keyboard events.
 func (s *Sender) Flush() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.handle != nil {
-		C.typr_io_sender_flush(s.handle)
+		C.axidev_io_keyboard_sender_flush(s.handle)
 	}
 }
 
@@ -232,6 +235,6 @@ func (s *Sender) SetKeyDelay(delayMicroseconds uint32) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.handle != nil {
-		C.typr_io_sender_set_key_delay(s.handle, C.uint32_t(delayMicroseconds))
+		C.axidev_io_keyboard_sender_set_key_delay(s.handle, C.uint32_t(delayMicroseconds))
 	}
 }
