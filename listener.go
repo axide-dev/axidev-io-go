@@ -1,7 +1,7 @@
-package typrio
+package axidevio
 
 /*
-#include <typr-io/c_api.h>
+#include <axidev-io/c_api.h>
 
 // Callback bridge for Go
 extern void goListenerCallback(uint32_t codepoint, uint16_t key, uint8_t mods, _Bool pressed, void* user_data);

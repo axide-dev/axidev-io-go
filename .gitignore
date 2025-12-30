@@ -1,6 +1,6 @@
 .DS_Store
-include/typr-io/*
-!include/typr-io/c_api.h
+include/axidev-io/*
+!include/axidev-io/c_api.h
 **/cmake/**
 **/CMakeFiles/**
 **/CMakeLists.txt

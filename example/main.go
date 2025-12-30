@@ -1,4 +1,4 @@
-// Example usage of the typrio package.
+// Example usage of the axidevio package.
 
 package main
 
@@ -9,15 +9,15 @@ import (
 	"syscall"
 	"time"
 
-	typrio "github.com/ziedyousfi/axidev-io-go"
+	axidevio "github.com/ziedyousfi/axidev-io-go"
 )
 
 func main() {
-	fmt.Println("typr-io-go example")
-	fmt.Println("Library version:", typrio.LibraryVersion())
+	fmt.Println("axidev-io-go example")
+	fmt.Println("Library version:", axidevio.LibraryVersion())
 
 	// --- Sender Example ---
-	sender, err := typrio.NewSender()
+	sender, err := axidevio.NewSender()
 	if err != nil {
 		fmt.Println("Failed to create sender:", err)
 		os.Exit(1)
@@ -37,22 +37,22 @@ func main() {
 	}
 
 	// Convert key names to Key values
-	keyA := typrio.StringToKey("A")
-	keyEnter := typrio.StringToKey("Return")
+	keyA := axidevio.StringToKey("A")
+	keyEnter := axidevio.StringToKey("Return")
 	fmt.Printf("Key A = %d, Key Enter = %d\n", keyA, keyEnter)
-	fmt.Printf("Key A name = %q\n", typrio.KeyToString(keyA))
+	fmt.Printf("Key A name = %q\n", axidevio.KeyToString(keyA))
 
 	// Type some text (if supported)
 	if caps.CanInjectText {
 		fmt.Println("Typing text in 5 seconds...")
 		time.Sleep(5	 * time.Second)
-		if err := sender.TypeText("Hello from typr-io-go!"); err != nil {
+		if err := sender.TypeText("Hello from axidev-io-go!"); err != nil {
 			fmt.Println("TypeText error:", err)
 		}
 	}
 
 	// --- Listener Example ---
-	listener, err := typrio.NewListener()
+	listener, err := axidevio.NewListener()
 	if err != nil {
 		fmt.Println("Failed to create listener:", err)
 		os.Exit(1)
@@ -60,12 +60,12 @@ func main() {
 	defer listener.Close()
 
 	fmt.Println("\nStarting key listener (press Ctrl+C to exit)...")
-	err = listener.Start(func(event typrio.KeyEvent) {
+	err = listener.Start(func(event axidevio.KeyEvent) {
 		action := "released"
 		if event.Pressed {
 			action = "pressed"
 		}
-		keyName := typrio.KeyToString(event.Key)
+		keyName := axidevio.KeyToString(event.Key)
 		if keyName == "" {
 			keyName = fmt.Sprintf("0x%04X", event.Key)
 		}

@@ -1,4 +1,4 @@
-package typrio
+package axidevio
 
 // KeyEvent represents a keyboard event received by the listener.
 type KeyEvent struct {

@@ -1,13 +1,13 @@
-// Package typrio provides Go bindings for the typr-io input injection and listening library.
+// Package axidevio provides Go bindings for the axidev-io input injection and listening library.
 //
-// This package wraps the typr-io C API, providing a safe and idiomatic Go interface
+// This package wraps the axidev-io C API, providing a safe and idiomatic Go interface
 // for simulating keyboard input and monitoring global key events.
 //
 // # Quick Start
 //
 // Create a Sender to inject keyboard input:
 //
-//	sender, err := typrio.NewSender()
+//	sender, err := axidevio.NewSender()
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
@@ -17,18 +17,18 @@
 //	sender.TypeText("Hello, World!")
 //
 //	// Press a key combination
-//	sender.Combo(typrio.ModCtrl, typrio.StringToKey("S"))
+//	sender.Combo(axidevio.ModCtrl, axidevio.StringToKey("S"))
 //
 // Create a Listener to monitor keyboard events:
 //
-//	listener, err := typrio.NewListener()
+//	listener, err := axidevio.NewListener()
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
 //	defer listener.Close()
 //
-//	listener.Start(func(event typrio.KeyEvent) {
-//	    fmt.Printf("Key: %s, Pressed: %v\n", typrio.KeyToString(event.Key), event.Pressed)
+//	listener.Start(func(event axidevio.KeyEvent) {
+//	    fmt.Printf("Key: %s, Pressed: %v\n", axidevio.KeyToString(event.Key), event.Pressed)
 //	})
 //
 // # Thread Safety
@@ -48,4 +48,4 @@
 // On Linux:
 //
 //	export LD_LIBRARY_PATH=/path/to/lib:$LD_LIBRARY_PATH
-package typrio
+package axidevio

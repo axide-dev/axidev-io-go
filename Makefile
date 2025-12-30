@@ -94,7 +94,7 @@ install-current:
 	$(eval RELEASE_DIR := $(LIB_NAME)-$(VERSION)-$(PLATFORM)-$(GOARCH))
 	$(eval TARBALL := $(RELEASE_DIR).tar.gz)
 
-	@echo "Download of the typr-io release for $(PLATFORM)-$(GOARCH)..."
+	@echo "Download of the axidev-io release for $(PLATFORM)-$(GOARCH)..."
 	@curl -L $(REPO_URL)/$(TARBALL) -o $(TARBALL)
 
 	@echo "Extracting..."

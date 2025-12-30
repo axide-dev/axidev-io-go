@@ -1,9 +1,9 @@
-package typrio
+package axidevio
 
 /*
 #cgo CFLAGS: -I${SRCDIR}/include
 
-#include <typr-io/c_api.h>
+#include <axidev-io/c_api.h>
 #include <stdlib.h>
 */
 import "C"
@@ -13,7 +13,7 @@ import (
 	"unsafe"
 )
 
-// LibraryVersion returns the typr-io library version string.
+// LibraryVersion returns the axidev-io library version string.
 func LibraryVersion() string {
 	return C.GoString(C.typr_io_library_version())
 }

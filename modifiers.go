@@ -1,7 +1,7 @@
-package typrio
+package axidevio
 
 /*
-#include <typr-io/c_api.h>
+#include <axidev-io/c_api.h>
 */
 import "C"
 
@@ -11,8 +11,8 @@ type Modifier uint8
 // Modifier constants matching the C API.
 // These can be combined using bitwise OR:
 //
-//	mods := typrio.ModCtrl | typrio.ModShift
-//	sender.Combo(mods, typrio.StringToKey("S"))  // Ctrl+Shift+S
+//	mods := axidevio.ModCtrl | axidevio.ModShift
+//	sender.Combo(mods, axidevio.StringToKey("S"))  // Ctrl+Shift+S
 const (
 	ModShift    Modifier = C.TYPR_IO_MOD_SHIFT
 	ModCtrl     Modifier = C.TYPR_IO_MOD_CTRL

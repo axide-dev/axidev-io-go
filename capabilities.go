@@ -1,4 +1,4 @@
-package typrio
+package axidevio
 
 // Capabilities describes the features supported by the active backend.
 type Capabilities struct {

@@ -1,7 +1,7 @@
-package typrio
+package axidevio
 
 /*
-#include <typr-io/c_api.h>
+#include <axidev-io/c_api.h>
 */
 import "C"
 
