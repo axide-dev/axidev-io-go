@@ -19,7 +19,7 @@
 //
 // See the keyboard subpackage for keyboard input injection and monitoring:
 //
-//	import "github.com/ziedyousfi/axidev-io-go/keyboard"
+//	import "github.com/axide-dev/axidev-io-go/keyboard"
 //
 //	sender, _ := keyboard.NewSender()
 //	sender.TypeText("Hello!")

@@ -24,7 +24,7 @@ import (
 	"sync"
 	"unsafe"
 
-	axidevio "github.com/ziedyousfi/axidev-io-go"
+	axidevio "github.com/axide-dev/axidev-io-go"
 )
 
 // ListenerCallback is the function signature for keyboard event callbacks.

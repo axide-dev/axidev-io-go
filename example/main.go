@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	axidevio "github.com/ziedyousfi/axidev-io-go"
-	"github.com/ziedyousfi/axidev-io-go/keyboard"
+	axidevio "github.com/axide-dev/axidev-io-go"
+	"github.com/axide-dev/axidev-io-go/keyboard"
 )
 
 func main() {

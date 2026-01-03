@@ -11,7 +11,7 @@ import (
 	"sync"
 	"unsafe"
 
-	axidevio "github.com/ziedyousfi/axidev-io-go"
+	axidevio "github.com/axide-dev/axidev-io-go"
 )
 
 // Sender provides keyboard input injection capabilities.
